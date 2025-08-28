@@ -1,0 +1,28 @@
+# Node modules
+node_modules/
+ 
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+ 
+# React Native packager
+.expo/
+.expo-shared/
+ 
+# Android build
+android/.gradle/
+android/app/build/
+*.apk
+ 
+# iOS build
+ios/build/
+ios/Pods/
+ 
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+ 
+# Environment variables
+.env
