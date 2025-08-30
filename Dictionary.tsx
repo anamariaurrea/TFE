@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, ScrollView, Image, FlatList } from 'react-native';
-import { Appbar, Card, Text, useTheme, Divider, IconButton } from 'react-native-paper';
+import { Appbar, Card, Text, useTheme, Divider } from 'react-native-paper';
 
 type Item = { id: string; title: string; image?: string; rating?: number };
 
@@ -16,17 +16,98 @@ const FEATURED: Item[] = [
 ];
 
 function Stars({ value = 0 }: { value?: number }) {
+  const theme = useTheme();
   const stars = [0, 1, 2];
   return (
-    <View style={{ flexDirection: 'row', gap: 4 }}>
+    <View style={{ flexDirection: 'row' }}>
       {stars.map(i => (
         <Image
           key={i}
           source={require('./assets/kid_star.png')}
-          style={{ width: 20, height: 18, marginRight: 4, opacity: i < value ? 1 : 0.3 }}
+          style={{
+            width: 20, height: 20, marginRight: 4,
+            // en dark, baja un poco sin volverlas invisibles
+            opacity: i < value ? 1 : (theme.dark ? 0.45 : 0.3),
+          }}
         />
       ))}
     </View>
+  );
+}
+
+function RecentCard({ item }: { item: Item }) {
+  const theme = useTheme();
+  return (
+    <Card
+      mode="outlined"
+      style={{
+        width: 380, borderRadius: 16, overflow: 'hidden', marginRight: 12,
+        backgroundColor: theme.colors.surface,
+        borderColor: theme.colors.outline,
+      }}
+    >
+      {item.image ? (
+        <View style={{ paddingHorizontal: 9, paddingTop: 9, marginBottom: 6 }}>
+          <Image
+            source={{ uri: item.image }}
+            style={{ width: '100%', height: 140, borderRadius: 16 }}
+            resizeMode="cover"
+          />
+        </View>
+      ) : (
+        <View
+          style={{
+            height: 140, margin: 9, borderRadius: 16,
+            backgroundColor: theme.colors.surfaceVariant,
+          }}
+        />
+      )}
+
+      <View style={{ paddingHorizontal: 12, paddingBottom: 12 }}>
+        <Text variant="titleMedium" style={{ marginBottom: 6, color: theme.colors.onSurface }}>
+          {item.title}
+        </Text>
+        <Stars value={item.rating} />
+      </View>
+    </Card>
+  );
+}
+
+function FeaturedCard({ item }: { item: Item }) {
+  const theme = useTheme();
+  return (
+    <Card
+      mode="outlined"
+      style={{
+        width: '48%', borderRadius: 16, overflow: 'hidden',
+        backgroundColor: theme.colors.surface,
+        borderColor: theme.colors.outline,
+      }}
+    >
+      {item.image ? (
+        <View style={{ paddingHorizontal: 9, paddingTop: 9, marginBottom: 6 }}>
+          <Image
+            source={{ uri: item.image }}
+            style={{ width: '100%', height: 96, borderRadius: 16 }}
+            resizeMode="cover"
+          />
+        </View>
+      ) : (
+        <View
+          style={{
+            height: 96, margin: 9, borderRadius: 16,
+            backgroundColor: theme.colors.surfaceVariant,
+          }}
+        />
+      )}
+
+      <View style={{ paddingHorizontal: 12, paddingBottom: 12 }}>
+        <Text variant="bodyMedium" style={{ marginBottom: 6, color: theme.colors.onSurface }}>
+          {item.title}
+        </Text>
+        <Stars value={item.rating} />
+      </View>
+    </Card>
   );
 }
 
@@ -35,64 +116,42 @@ export default function DictionaryScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
-      {/* Appbar */}
-      <Appbar.Header mode="small">
-        <Appbar.Content title="Diccionario" />
+      <Appbar.Header mode="small" style={{ backgroundColor: theme.colors.surface }}>
+        <Appbar.Content title="Diccionario" color={theme.colors.onSurface} />
         <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 8 }}>
-          <Image source={require('./assets/bolt.png')} style={{
-            width: 24,
-            height: 24,
-            resizeMode: 'contain',
-          }} />
-          <Text variant="bodyMedium" style={{ marginRight: 8 }}>0</Text>
+          <Image source={require('./assets/bolt.png')} style={{ width: 22, height: 22, resizeMode: 'contain', marginRight: 4 }} />
+          <Text variant="bodyMedium" style={{ color: theme.colors.onSurface }}>0</Text>
         </View>
       </Appbar.Header>
 
-      <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 32 }}>
-        <Text variant="titleMedium" style={{ marginBottom: 8 }}>Recientes</Text>
+      <ScrollView
+        contentContainerStyle={{ padding: 16, paddingBottom: 32 }}
+        style={{ backgroundColor: theme.colors.background }}
+      >
+        <Text variant="titleMedium" style={{ marginBottom: 8, color: theme.colors.onSurface }}>
+          Recientes
+        </Text>
+
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
           data={RECENTS}
           keyExtractor={i => i.id}
-          contentContainerStyle={{ paddingRight: 0 }}
-          ItemSeparatorComponent={() => <View style={{ width: 0 }} />}
-          renderItem={({ item }) => (
-            <Card style={{ width: 380, borderRadius: 16, overflow: 'hidden', padding: 9 }}>
-              {item.image ? (
-                <View style={{ overflow: 'hidden', marginBottom: 9 }}>
-                  <Image source={{ uri: item.image }} style={{ width: '95%', height: 140, borderRadius: 16, }} />
-                </View>
-              ) : (
-                <View style={{ height: 140, backgroundColor: '#E6EEF8', borderTopLeftRadius: 16, borderTopRightRadius: 16, marginBottom: 9 }} />
-              )}
-              <Card.Content style={{ gap: 6 }}>
-                <Text variant="titleMedium">{item.title}</Text>
-                <Stars value={item.rating} />
-              </Card.Content>
-            </Card>
-          )}
+          renderItem={({ item }) => <RecentCard item={item} />}
+          // evita que el FlatList pinte blanco por default
+          style={{ backgroundColor: 'transparent' }}
+          contentContainerStyle={{ paddingBottom: 4 }}
         />
 
-        <Divider style={{ marginVertical: 16 }} />
+        <Divider style={{ marginVertical: 16, backgroundColor: theme.colors.outline }} />
 
-        {/* Destacados */}
-        <Text variant="titleMedium" style={{ marginBottom: 8 }}>Destacados</Text>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 2 }}>
+        <Text variant="titleMedium" style={{ marginBottom: 8, color: theme.colors.onSurface }}>
+          Destacados
+        </Text>
+
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
           {FEATURED.map(it => (
-            <Card key={it.id} mode="contained" style={{ width: '48%', borderRadius: 16, overflow: 'hidden', padding: 9, backgroundColor: '#F9F9FF' }}>
-              {it.image ? (
-                <View style={{ overflow: 'hidden', marginBottom: 9 }}>
-                  <Image source={{ uri: it.image }} style={{ width: '90%', height: 96, borderRadius: 16, }} />
-                </View>
-              ) : (
-                <View style={{ height: 96, backgroundColor: '#E6EEF8', borderTopLeftRadius: 16, borderTopRightRadius: 16, marginBottom: 9 }} />
-              )}
-              <Card.Content style={{ gap: 6, backgroundColor: '#F9F9FF' }}>
-                <Text variant="bodyMedium">{it.title}</Text>
-                <Stars value={it.rating} />
-              </Card.Content>
-            </Card>
+            <FeaturedCard key={it.id} item={it} />
           ))}
         </View>
       </ScrollView>

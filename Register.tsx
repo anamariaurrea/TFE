@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   cta: {
     marginTop: 8,
     borderRadius: 28,
-    backgroundColor: '#5672A3', // azul del mock
+    backgroundColor: '#5672A3',
   },
   terms: {
     marginTop: 8,
@@ -157,6 +157,6 @@ const styles = StyleSheet.create({
   link: {
     fontWeight: '700',
     textDecorationLine: 'none',
-    color: '#5672A3', // azul del mock
+    color: '#5672A3',
   },
 });

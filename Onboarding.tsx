@@ -12,7 +12,7 @@ import {
   useTheme,
 } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import WavyProgressBar from './WavyProgressBar';
+import { WaveProgressBar } from './WavyProgressBar';
 
 type Props = { navigation?: any; username?: string };
 
@@ -40,7 +40,7 @@ const COURSES = [
     title: 'Primeros pasos en la radio',
     meta: 'Beginner • 3 horas',
     desc: 'Diseñado para el principiante absoluto.',
-    img: 'https://picsum.photos/seed/ham1/640/360',
+    img: 'https://picsum.photos/seed/ham2/640/360',
   },
   {
     id: 'c2',
@@ -63,7 +63,6 @@ function SelectField({
   onChange: (v: string) => void;
 }) {
   const [open, setOpen] = React.useState(false);
-
   return (
     <Menu
       visible={open}
@@ -72,14 +71,9 @@ function SelectField({
         <Button
           mode="outlined"
           onPress={() => setOpen(true)}
-
-          contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}
+          contentStyle={{ justifyContent: 'space-between' }}
           style={{ borderRadius: 12 }}
-          icon={({ size, color }) => (
-            <View style={{ marginLeft: 1 }}>
-              <Text style={{ fontSize: size, color }}>{'⌄'}</Text>
-            </View>
-          )}
+          icon="chevron-down"
         >
           {value || label}
         </Button>
@@ -145,19 +139,15 @@ export default function OnboardingWizard({ username = 'Carlos' }: Props) {
         <Appbar.Content title={['Bienvenida', 'Objetivo', 'Intereses', 'Curso'][step]} />
       </Appbar.Header>
 
-      <View style={{ paddingHorizontal: 16, marginTop: 8, marginBottom: 4 }}>
-        <WavyProgressBar
-          progress={(step + 1) / 4}
-        />
-      </View>
+      <WaveProgressBar progress={progress}  />
 
       <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 24 }}>
         {/* STEP 1 ------------------------------------------------------------- */}
         {step === 0 && (
           <View>
-            <Text variant="headlineMedium" style={{ textAlign: 'center', marginTop: 12, fontWeight: 'bold', color: '#425E91' }}>
+            <Text variant="headlineMedium" style={{ textAlign: 'center', marginTop: 12 }}>
               Te damos la bienvenida, {'\n'}
-              {username}
+              <Text style={{ fontWeight: 'bold' }}>{username}</Text>
             </Text>
             <Text
               variant="bodyMedium"
@@ -174,7 +164,6 @@ export default function OnboardingWizard({ username = 'Carlos' }: Props) {
                 onChange={setAge}
               />
               <SelectField
-                
                 label="¿Cuál es tu nivel de experiencia?"
                 value={experience}
                 options={EXPERIENCE_OPTIONS}
@@ -184,9 +173,10 @@ export default function OnboardingWizard({ username = 'Carlos' }: Props) {
           </View>
         )}
 
+        {/* STEP 2 ------------------------------------------------------------- */}
         {step === 1 && (
           <View>
-            <Text variant="headlineMedium" style={{ textAlign: 'center', marginTop: 12, fontWeight: 'bold', color: '#425E91' }}>
+            <Text variant="headlineMedium" style={{ textAlign: 'center', marginTop: 12 }}>
               ¿Qué buscas en Hamly?
             </Text>
             <Text
@@ -196,7 +186,7 @@ export default function OnboardingWizard({ username = 'Carlos' }: Props) {
               Esto nos ayudará a crear una mejor experiencia para ti.
             </Text>
 
-            <Card mode="contained" style={{ borderRadius: 0, overflow: 'hidden', backgroundColor: '#F0F4FF' }}>
+            <Card mode="contained" style={{ borderRadius: 16, overflow: 'hidden',backgroundColor: '#C4C6D0' }}>
               {GOALS.map((g, i) => (
                 <View key={g}>
                   <View
@@ -205,6 +195,8 @@ export default function OnboardingWizard({ username = 'Carlos' }: Props) {
                       alignItems: 'center',
                       paddingHorizontal: 12,
                       paddingVertical: 14,
+                      marginBottom: 5,
+                      backgroundColor: '#C4C6D0',
                       justifyContent: 'space-between',
                     }}
                   >
@@ -214,7 +206,7 @@ export default function OnboardingWizard({ username = 'Carlos' }: Props) {
                       onPress={() => setGoals((prev) => ({ ...prev, [g]: !prev[g] }))}
                     />
                   </View>
-                  {i < GOALS.length - 1 && <View style={{ height: 10, backgroundColor: 'white' }} />}
+                  {i < GOALS.length - 1 && <View style={{ height: 1, backgroundColor: 'white' }} />}
                 </View>
               ))}
             </Card>
@@ -224,7 +216,7 @@ export default function OnboardingWizard({ username = 'Carlos' }: Props) {
         {/* STEP 3 ------------------------------------------------------------- */}
         {step === 2 && (
           <View>
-            <Text variant="headlineMedium" style={{ textAlign: 'center', marginTop: 12, fontWeight: 'bold', color: '#425E91' }}>
+            <Text variant="headlineMedium" style={{ textAlign: 'center', marginTop: 12 }}>
               ¿Qué te interesa más?
             </Text>
             <Text
@@ -239,8 +231,6 @@ export default function OnboardingWizard({ username = 'Carlos' }: Props) {
                 const selected = topics.includes(t);
                 return (
                   <Chip
-                    selectedColor={selected ? '#0E4A73' : '#44474E'}
-                    style={{ backgroundColor: selected ? '#E6EEF8' : 'white' }}
                     key={t}
                     mode={selected ? 'flat' : 'outlined'}
                     selected={selected}
@@ -249,6 +239,10 @@ export default function OnboardingWizard({ username = 'Carlos' }: Props) {
                         prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]
                       )
                     }
+                    style={{
+                      borderRadius: 16,
+                      backgroundColor: selected ? "#CEE5FF" : undefined,
+                    }}
                   >
                     {t}
                   </Chip>
@@ -261,7 +255,7 @@ export default function OnboardingWizard({ username = 'Carlos' }: Props) {
         {/* STEP 4 ------------------------------------------------------------- */}
         {step === 3 && (
           <View>
-            <Text variant="headlineMedium" style={{ textAlign: 'center', marginTop: 12, fontWeight: 'bold', color: '#425E91' }}>
+            <Text variant="headlineMedium" style={{ textAlign: 'center', marginTop: 12 }}>
               Selecciona un curso para comenzar
             </Text>
             <Text
@@ -276,7 +270,7 @@ export default function OnboardingWizard({ username = 'Carlos' }: Props) {
                 {COURSES.map((c) => {
                   const active = selectedCourse === c.id;
                   return (
-                    <Card key={c.id} mode="outlined" style={{ width: 280, borderRadius: 16, backgroundColor: '#F0F4FF' }}>
+                    <Card key={c.id} mode="outlined" style={{ width: 280, borderRadius: 16 }}>
                       <Image
                         source={{ uri: c.img }}
                         style={{ width: '100%', height: 140, borderTopLeftRadius: 16, borderTopRightRadius: 16 }}
@@ -286,9 +280,8 @@ export default function OnboardingWizard({ username = 'Carlos' }: Props) {
                         <Text variant="bodySmall" style={{ opacity: 0.7 }}>{c.meta}</Text>
                         <Text variant="bodySmall" style={{ opacity: 0.8 }}>{c.desc}</Text>
                         <Button
-                          mode='contained'
-                         
-                          style={{ marginTop: 8, borderRadius: 24, backgroundColor:'#425E91' }}
+                          mode={active ? 'contained' : 'outlined'}
+                          style={{ marginTop: 8, borderRadius: 24 }}
                           onPress={() => setSelectedCourse(c.id)}
                         >
                           {active ? 'Seleccionado' : 'Comenzar curso'}
@@ -301,7 +294,7 @@ export default function OnboardingWizard({ username = 'Carlos' }: Props) {
             </ScrollView>
 
             <Text style={{ textAlign: 'center', marginTop: 12 }}>
-              ¿No estás listo para comenzar? <Text style={{ color: '#425E91', fontWeight: 'bold' }}>Explora primero.</Text>
+              ¿No estás listo para comenzar? <Text style={{ color: theme.colors.primary }}>Explora primero.</Text>
             </Text>
           </View>
         )}
@@ -313,12 +306,12 @@ export default function OnboardingWizard({ username = 'Carlos' }: Props) {
           mode="contained"
           onPress={step < 3 ? next : finish}
           disabled={!canContinue}
-          style={{ borderRadius: 28, paddingVertical: 6, backgroundColor: '#425E91' }}
+          style={{ borderRadius: 28, paddingVertical: 6 }}
         >
           {step < 3 ? 'Continuar' : 'Guardar y continuar'}
         </Button>
         {step < 3 && (
-          <Button mode="text" textColor='#425E91' onPress={next} style={{ marginTop: 8 }}>
+          <Button mode="text" onPress={next} style={{ marginTop: 8 }}>
             Omitir por ahora
           </Button>
         )}

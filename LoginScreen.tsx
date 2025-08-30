@@ -21,8 +21,7 @@ export default function LoginScreen() {
         style={styles.kav}
       >
         <View style={styles.header}>
-          <Image style={styles.logo} resizeMode="contain" />
-          <Text variant="headlineLarge" style={styles.brand}>Hamly</Text>
+          <Image source={require('./assets/Logo.png')} style={styles.logo} resizeMode="contain" />
           <Text variant="titleMedium" style={styles.subtitle}>
             Tu primer contacto con la{'\n'}radioafición
           </Text>
@@ -84,7 +83,7 @@ const styles = StyleSheet.create({
   safe: { flex: 1 },
   kav: { flex: 1, paddingHorizontal: 24, justifyContent: 'space-between' },
   header: { alignItems: 'center', marginTop: 24 },
-  logo: { width: 56, height: 56 },
+  logo: { marginTop: 60, width: 420, height: 120 },
   brand: { marginTop: 8, fontWeight: '800' },
   subtitle: { textAlign: 'center', marginTop: 8, color: '#5672A3' },
   actions: { marginBottom: 32 },

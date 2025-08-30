@@ -45,9 +45,9 @@ export default function CommunityScreen() {
       <ScrollView contentContainerStyle={{ padding: 16 }}>
         {/* Chips */}
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
-          <Chip icon="fire" onPress={() => {}}>Tendencia</Chip>
-          <Chip icon="newspaper-variant" onPress={() => {}}>Noticias</Chip>
-          <Chip icon="chart-bar" onPress={() => {}}>Top hoy</Chip>
+          <Chip style={{backgroundColor: 'transparent', borderColor: '#C4C6D0'}} icon="fire" onPress={() => {}}>Tendencia</Chip>
+          <Chip style={{backgroundColor: 'transparent', borderColor: '#C4C6D0'}} icon="newspaper-variant" onPress={() => {}}>Noticias</Chip>
+          <Chip style={{backgroundColor: 'transparent', borderColor: '#C4C6D0'}} icon="chart-bar" onPress={() => {}}>Top hoy</Chip>
         </View>
 
         {/* Lista de posts */}
